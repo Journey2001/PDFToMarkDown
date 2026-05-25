@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Markdown Translate Console</title>
+    <link rel="stylesheet" href="../shared/layout.css" />
+  </head>
+  <body data-app="translate">
+    <main class="app-shell">
+      <section class="hero-card">
+        <p class="eyebrow">Multi App Translate</p>
+        <h1>Markdown 批量翻译</h1>
+        <p class="hero-copy">
+          先扫描顶层目录中的 Markdown，再选择需要翻译的文件，统一提交目标语言和模型参数。
+        </p>
+      </section>
+
+      <section class="panel-grid">
+        <section class="panel">
+          <form id="scan-form">
+            <div class="field">
+              <label for="scan-root">顶层目录</label>
+              <input id="scan-root" name="scanRoot" type="text" placeholder="例如：output" required />
+            </div>
+
+            <button id="scan-button" type="submit">扫描 Markdown</button>
+          </form>
+
+          <form id="translate-form">
+            <div class="field">
+              <label for="markdown-files">待翻译 Markdown</label>
+              <select id="markdown-files" name="markdownFiles" multiple size="10"></select>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="target-language">目标语言</label>
+                <input id="target-language" name="targetLanguage" type="text" value="zh-CN" />
+              </div>
+
+              <div class="field">
+                <label for="translate-model">翻译模型</label>
+                <input id="translate-model" name="translateModel" type="text" placeholder="deepseek-chat" />
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="translate-concurrency">并发数</label>
+                <input id="translate-concurrency" name="translateConcurrency" type="number" min="1" max="32" placeholder="12" />
+              </div>
+
+              <div class="field">
+                <label for="translate-batch-size">每请求块数</label>
+                <input id="translate-batch-size" name="translateBatchSize" type="number" min="1" max="16" placeholder="1" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="deepseek-api-key">DeepSeek API Key</label>
+              <input id="deepseek-api-key" name="deepseekApiKey" type="password" placeholder="sk-..." autocomplete="off" />
+            </div>
+
+            <div class="field">
+              <label for="translate-output-path">统一输出路径（可选）</label>
+              <input id="translate-output-path" name="outputPath" type="text" placeholder="只处理单个文件时可填写" />
+            </div>
+
+            <div class="field">
+              <label for="translate-cache-file">缓存文件（可选）</label>
+              <input id="translate-cache-file" name="cacheFile" type="text" placeholder="例如：output/.translation-cache.json" />
+            </div>
+
+            <button id="submit-translate" type="submit">提交翻译任务</button>
+
+            <div class="status-line">
+              <span id="job-status-badge" class="status-badge status-idle">Idle</span>
+              <p id="status-text" class="status-text">等待扫描目录</p>
+            </div>
+          </form>
+        </section>
+
+        <section class="result-card">
+          <h2>任务结果</h2>
+          <p class="section-copy">展示翻译任务的状态、条目数量和每个文件的翻译输出。</p>
+
+          <dl class="result-list">
+            <div>
+              <dt>任务 ID</dt>
+              <dd id="job-id">-</dd>
+            </div>
+            <div>
+              <dt>任务状态</dt>
+              <dd id="job-state">-</dd>
+            </div>
+            <div>
+              <dt>任务条目数</dt>
+              <dd id="job-count">0</dd>
+            </div>
+            <div>
+              <dt>输出摘要</dt>
+              <dd id="job-summary">尚未提交任务</dd>
+            </div>
+          </dl>
+
+          <pre id="job-log" class="log-output">翻译子应用尚未开始执行任务。</pre>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

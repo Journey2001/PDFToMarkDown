@@ -1,0 +1,42 @@
+[
+  {
+    "id": "remove-author-attribution",
+    "name": "删除标题末尾的 by 作者",
+    "pattern": "\\s+\\(by \\[@[^\\]]+\\]\\([^)]+\\)\\)\\s*$",
+    "flags": "gm",
+    "replacement": "",
+    "enabled": true
+  },
+  {
+    "id": "remove-source-lines",
+    "name": "删除 Source / 来源 行",
+    "pattern": "^\\*\\*(?:Source|来源)\\*\\*:\\s.*(?:\\r?\\n)?",
+    "flags": "gm",
+    "replacement": "",
+    "enabled": true
+  },
+  {
+    "id": "strip-heading-markdown-links",
+    "name": "删除标题中的 Markdown 链接",
+    "pattern": "^(#{1,6}\\s+.*)\\[([^\\]]+)\\]\\(https?:\\/\\/[^)]+\\)(.*)$",
+    "flags": "gm",
+    "replacement": "$1$2$3",
+    "enabled": true
+  },
+  {
+    "id": "collapse-extra-blank-lines",
+    "name": "合并连续多余空行",
+    "pattern": "\\n{3,}",
+    "flags": "g",
+    "replacement": "\n\n",
+    "enabled": true
+  },
+  {
+    "id": "trim-line-trailing-space",
+    "name": "删除行尾空白",
+    "pattern": "[ \\t]+$",
+    "flags": "gm",
+    "replacement": "",
+    "enabled": true
+  }
+]

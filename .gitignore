@@ -1,0 +1,32 @@
+node_modules/
+
+# Build and generated outputs
+output/
+dist/
+build/
+coverage/
+.cache/
+
+# Local tooling artifacts
+.playwright-mcp/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Editor / IDE
+.idea/
+.vscode/
+
+# Private local content
+淘宝店/

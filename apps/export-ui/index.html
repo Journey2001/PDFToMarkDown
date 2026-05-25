@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Markdown Export Console</title>
+    <link rel="stylesheet" href="../shared/layout.css" />
+  </head>
+  <body data-app="export">
+    <main class="app-shell">
+      <section class="hero-card">
+        <p class="eyebrow">Multi App Export</p>
+        <h1>Markdown 批量导出</h1>
+        <p class="hero-copy">
+          扫描并选择多个 Markdown 文件后，统一生成 HTML 和 PDF 输出，可附加导出选项。
+        </p>
+      </section>
+
+      <section class="panel-grid">
+        <section class="panel">
+          <form id="scan-form">
+            <div class="field">
+              <label for="scan-root">顶层目录</label>
+              <input id="scan-root" name="scanRoot" type="text" placeholder="例如：output" required />
+            </div>
+
+            <button id="scan-button" type="submit">扫描 Markdown</button>
+          </form>
+
+          <form id="export-form">
+            <div class="field">
+              <label for="markdown-files">待导出 Markdown</label>
+              <select id="markdown-files" name="markdownFiles" multiple size="10"></select>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="watermark-text">PDF 水印文字</label>
+                <input id="watermark-text" name="watermarkText" type="text" placeholder="例如：AI灵感仓库" />
+              </div>
+
+              <div class="field">
+                <label for="lang">输出语言</label>
+                <select id="lang" name="lang">
+                  <option value="zh-CN">zh-CN</option>
+                  <option value="zh-TW">zh-TW</option>
+                  <option value="en">en</option>
+                </select>
+              </div>
+            </div>
+
+            <label class="toggle-item">
+              <input id="append-license-note" name="appendLicenseNote" type="checkbox" />
+              <span>在 HTML / PDF 末尾追加许可说明</span>
+            </label>
+
+            <div class="field">
+              <label for="license-note">许可说明内容</label>
+              <textarea id="license-note" class="license-note-input" name="licenseNote" placeholder="例如：仅供个人学习与整理使用。"></textarea>
+            </div>
+
+            <button id="submit-export" type="submit">提交导出任务</button>
+
+            <div class="status-line">
+              <span id="job-status-badge" class="status-badge status-idle">Idle</span>
+              <p id="status-text" class="status-text">等待扫描目录</p>
+            </div>
+          </form>
+        </section>
+
+        <section class="result-card">
+          <h2>任务结果</h2>
+          <p class="section-copy">展示导出任务的状态、条目数量和每个文件的 HTML/PDF 结果。</p>
+
+          <dl class="result-list">
+            <div>
+              <dt>任务 ID</dt>
+              <dd id="job-id">-</dd>
+            </div>
+            <div>
+              <dt>任务状态</dt>
+              <dd id="job-state">-</dd>
+            </div>
+            <div>
+              <dt>任务条目数</dt>
+              <dd id="job-count">0</dd>
+            </div>
+            <div>
+              <dt>输出摘要</dt>
+              <dd id="job-summary">尚未提交任务</dd>
+            </div>
+          </dl>
+
+          <pre id="job-log" class="log-output">导出子应用尚未开始执行任务。</pre>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

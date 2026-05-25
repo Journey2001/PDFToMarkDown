@@ -1,0 +1,19 @@
+{
+  "name": "pdf-to-markdown",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "export:zh": "node scripts/export-awesome-gpt-image-pdf.mjs --lang zh-CN",
+    "export:en": "node scripts/export-awesome-gpt-image-pdf.mjs --lang en",
+    "clean": "node scripts/clean-markdown.mjs",
+    "translate": "node scripts/translate-markdown.mjs",
+    "gui": "node scripts/gui-server.mjs",
+    "test": "node --test",
+    "test:gui": "node --test tests/gui-multi-app.test.mjs"
+  },
+  "dependencies": {
+    "markdown-it": "^14.1.0",
+    "playwright": "^1.53.0"
+  }
+}

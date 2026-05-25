@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Markdown Exporter GUI</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero-card">
+        <p class="eyebrow">Local Export Console</p>
+        <h1>Markdown 翻译与导出控制台</h1>
+        <p class="hero-copy">既可以从 GitHub 抓取 Markdown，也可以直接选择本地 Markdown 做翻译、HTML 预览和 PDF 导出。</p>
+      </section>
+
+      <section class="panel-grid">
+        <form id="export-form" class="control-panel">
+          <div class="mode-switch" role="radiogroup" aria-label="导出模式">
+            <label class="mode-pill">
+              <input type="radio" name="mode" value="github" checked />
+              <span>GitHub 地址</span>
+            </label>
+            <label class="mode-pill">
+              <input type="radio" name="mode" value="local" />
+              <span>本地 Markdown</span>
+            </label>
+          </div>
+
+          <label class="field">
+            <span>GitHub Markdown 地址</span>
+            <input id="github-url" name="githubUrl" type="url" placeholder="https://github.com/owner/repo/blob/main/README.md" />
+          </label>
+
+          <label class="field">
+            <span>本地 Markdown 路径</span>
+            <input id="input-path" name="inputPath" type="text" placeholder="D:\\AIPainting\\PDFToMarkDown\\output\\zh-CN\\README.zh-CN.md" />
+          </label>
+
+          <div class="field field-with-button">
+            <label class="field grow-field">
+              <span>已发现的 Markdown 文档</span>
+              <select id="markdown-select" name="markdownSelect">
+                <option value="">请选择一个 Markdown 文档</option>
+              </select>
+            </label>
+            <button id="refresh-files" class="secondary-button" type="button">刷新列表</button>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
+              <span>默认语言</span>
+              <select id="lang" name="lang">
+                <option value="zh-CN">zh-CN</option>
+                <option value="en">en</option>
+                <option value="zh-TW">zh-TW</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>输出目录</span>
+              <input id="output-root" name="outputRoot" type="text" />
+            </label>
+          </div>
+
+          <section class="subpanel">
+            <div class="subpanel-header">
+              <h2>翻译设置</h2>
+              <p>翻译仅处理本地 Markdown，并生成独立的新文件，不覆盖原文。</p>
+            </div>
+
+            <div class="field-row">
+              <label class="field">
+                <span>目标语言</span>
+                <select id="target-language" name="targetLanguage">
+                  <option value="zh-CN">zh-CN</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>DeepSeek 模型</span>
+                <input id="translate-model" name="translateModel" type="text" placeholder="deepseek-chat" />
+              </label>
+
+              <label class="field">
+                <span>翻译并发</span>
+                <input id="translate-concurrency-input" name="translateConcurrency" type="number" min="1" max="32" placeholder="12" />
+              </label>
+
+              <label class="field">
+                <span>每请求块数</span>
+                <input id="translate-batch-size-input" name="translateBatchSize" type="number" min="1" max="16" placeholder="1" />
+              </label>
+            </div>
+
+            <div class="field-row translate-row">
+              <label class="field">
+                <span>DeepSeek API Key</span>
+                <input id="deepseek-api-key" name="deepseekApiKey" type="password" placeholder="sk-..." autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span>翻译输出路径</span>
+                <input id="translate-output-path" name="translateOutputPath" type="text" placeholder="留空则自动生成 *.translated.zh-CN.md" />
+              </label>
+
+              <label class="field">
+                <span>缓存文件</span>
+                <input id="translate-cache-file" name="translateCacheFile" type="text" placeholder="留空则使用默认 .translation-cache.json" />
+              </label>
+
+              <div class="field">
+                <span>缓存操作</span>
+                <div class="inline-actions">
+                  <button id="clear-translation-cache" class="secondary-button danger-button" type="button">清理翻译缓存</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="subpanel">
+            <div class="subpanel-header">
+              <h2>正则清理规则</h2>
+              <p>用于从本地 Markdown 中删除固定模式内容。规则会保存到项目内，可以随时新增、删除和启停。</p>
+            </div>
+
+            <div class="field-row translate-row">
+              <label class="field">
+                <span>清理输出路径</span>
+                <input id="clean-output-path" name="cleanOutputPath" type="text" placeholder="留空则自动生成 *.cleaned.md" />
+              </label>
+
+              <div class="field">
+                <span>规则操作</span>
+                <div class="inline-actions">
+                  <button id="add-rule" class="secondary-button" type="button">添加规则</button>
+                  <button id="save-rules" class="secondary-button" type="button">保存规则</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="cleanup-rules" class="rule-list"></div>
+          </section>
+
+          <div class="toggle-list">
+            <label class="toggle-item">
+              <input id="strip-sources" name="stripSources" type="checkbox" />
+              <span>删除“来源”行</span>
+            </label>
+            <label class="toggle-item">
+              <input id="append-license-note" name="appendLicenseNote" type="checkbox" />
+              <span>在 HTML / PDF 末尾追加许可证说明</span>
+            </label>
+          </div>
+
+          <div class="actions">
+            <button id="fetch-markdown-button" type="submit" value="fetch-markdown">抓取并生成本地 Markdown</button>
+            <button id="clean-button" type="submit" value="clean">清理 Markdown</button>
+            <button id="translate-button" type="submit" value="translate">翻译成中文</button>
+            <button id="submit-button" type="submit" value="export">生成 HTML / PDF</button>
+            <p id="status-text" class="status-text">等待输入</p>
+          </div>
+        </form>
+
+        <section class="result-panel">
+          <div class="result-header">
+            <h2>导出结果</h2>
+            <span id="result-badge" class="result-badge idle">Idle</span>
+          </div>
+
+          <dl class="result-list">
+            <div>
+              <dt>清理 Markdown</dt>
+              <dd><a id="cleaned-link" href="#" target="_blank" rel="noreferrer">尚未生成</a></dd>
+            </div>
+            <div>
+              <dt>翻译 Markdown</dt>
+              <dd><a id="translated-link" href="#" target="_blank" rel="noreferrer">尚未生成</a></dd>
+            </div>
+            <div>
+              <dt>Markdown</dt>
+              <dd><a id="markdown-link" href="#" target="_blank" rel="noreferrer">尚未生成</a></dd>
+            </div>
+            <div>
+              <dt>HTML</dt>
+              <dd><a id="html-link" href="#" target="_blank" rel="noreferrer">尚未生成</a></dd>
+            </div>
+            <div>
+              <dt>PDF</dt>
+              <dd><a id="pdf-link" href="#" target="_blank" rel="noreferrer">尚未生成</a></dd>
+            </div>
+            <div>
+              <dt>图片数</dt>
+              <dd id="image-count">-</dd>
+            </div>
+            <div>
+              <dt>翻译块数</dt>
+              <dd id="chunk-count">-</dd>
+            </div>
+            <div>
+              <dt>已完成块</dt>
+              <dd id="chunk-completed-count">-</dd>
+            </div>
+            <div>
+              <dt>跳过块数</dt>
+              <dd id="chunk-skipped-count">-</dd>
+            </div>
+            <div>
+              <dt>缓存命中</dt>
+              <dd id="chunk-cache-hit-count">-</dd>
+            </div>
+            <div>
+              <dt>并发数</dt>
+              <dd id="translate-concurrency">-</dd>
+            </div>
+            <div>
+              <dt>重试次数</dt>
+              <dd id="translate-retry-count">-</dd>
+            </div>
+            <div>
+              <dt>清理命中数</dt>
+              <dd id="cleanup-count">-</dd>
+            </div>
+          </dl>
+
+          <section class="progress-panel" aria-live="polite">
+            <div class="progress-header">
+              <h3>翻译进度</h3>
+              <span id="translate-progress-label">0%</span>
+            </div>
+            <div class="progress-track">
+              <div id="translate-progress-bar" class="progress-bar"></div>
+            </div>
+            <p id="translate-progress-text" class="progress-text">尚未开始翻译任务。</p>
+          </section>
+
+          <pre id="log-output" class="log-output">GUI 已就绪。</pre>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

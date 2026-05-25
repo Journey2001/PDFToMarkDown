@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PDFToMarkDown GUI Shell</title>
+    <link rel="stylesheet" href="/shared/layout.css" />
+    <style>
+      .shell-hero {
+        margin-bottom: 14px;
+        padding: 14px 22px;
+        border-radius: 18px;
+      }
+
+      .shell-hero h1 {
+        margin-bottom: 4px;
+        font-size: 30px;
+      }
+
+      .shell-hero .hero-copy {
+        margin-bottom: 0;
+      }
+
+      .shell-nav {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 0 0 18px;
+      }
+
+      .shell-tab {
+        min-width: 116px;
+        padding: 10px 18px;
+        border: 1px solid rgba(124, 53, 19, 0.18);
+        color: var(--accent-deep);
+        background: #fff8ef;
+        box-shadow: none;
+      }
+
+      .shell-tab.is-active {
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+        box-shadow: 0 12px 24px rgba(124, 53, 19, 0.18);
+      }
+
+      .frame-panel {
+        padding: 0;
+        overflow: visible;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+      }
+
+      #app-frame {
+        display: block;
+        width: 100%;
+        min-height: 760px;
+        border: 0;
+        background: transparent;
+      }
+
+      @media (max-width: 640px) {
+        .shell-tab {
+          flex: 1 1 calc(50% - 10px);
+          min-width: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero-card shell-hero">
+        <h1>PDFToMarkDown 控制台</h1>
+        <p class="hero-copy">选择一个功能后直接在下方处理文件，子应用仍然可以单独打开和打包。</p>
+      </section>
+
+      <nav class="shell-nav" aria-label="应用导航">
+        <button class="shell-tab" type="button" data-app="download">下载</button>
+        <button class="shell-tab" type="button" data-app="clean">清洗</button>
+        <button class="shell-tab" type="button" data-app="translate">翻译</button>
+        <button class="shell-tab" type="button" data-app="export">导出 PDF</button>
+      </nav>
+
+      <section class="result-card frame-panel">
+        <iframe
+          id="app-frame"
+          title="PDFToMarkDown 子应用"
+          loading="lazy"
+          scrolling="no"
+          src="/download"
+        ></iframe>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

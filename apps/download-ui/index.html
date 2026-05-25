@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Markdown Download Console</title>
+    <link rel="stylesheet" href="../shared/layout.css" />
+  </head>
+  <body data-app="download">
+    <main class="app-shell">
+      <section class="hero-card">
+        <p class="eyebrow">Multi App Download</p>
+        <h1>Markdown 下载任务</h1>
+        <p class="hero-copy">
+          批量提交多个 GitHub Markdown 地址，统一写入指定保存目录，并在页面内查看任务执行结果。
+        </p>
+      </section>
+
+      <section class="panel-grid">
+        <form id="download-form" class="panel">
+          <div class="field">
+            <label for="github-urls">GitHub Markdown URL 列表</label>
+            <textarea
+              id="github-urls"
+              name="githubUrls"
+              placeholder="每行一个 GitHub Markdown URL，例如：&#10;https://github.com/owner/repo/blob/main/README.md"
+              required
+            ></textarea>
+            <p class="field-hint">支持一次提交多个地址，空行会自动忽略。</p>
+          </div>
+
+          <div class="field">
+            <label for="output-root">保存目录</label>
+            <input
+              id="output-root"
+              name="outputRoot"
+              type="text"
+              placeholder="例如：downloads"
+              required
+            />
+            <p class="field-hint">可填写绝对路径，也可填写相对路径；相对路径会按当前项目目录解析。</p>
+          </div>
+
+          <button id="submit-download" type="submit">提交下载任务</button>
+
+          <div class="status-line">
+            <span id="job-status-badge" class="status-badge status-idle">Idle</span>
+            <p id="status-text" class="status-text">等待输入</p>
+          </div>
+        </form>
+
+        <section class="result-card">
+          <h2>任务结果</h2>
+          <p class="section-copy">完成后会显示父任务状态、条目数量以及每个地址的输出结果。</p>
+
+          <dl id="job-result" class="result-list">
+            <div>
+              <dt>任务 ID</dt>
+              <dd id="job-id">-</dd>
+            </div>
+            <div>
+              <dt>任务状态</dt>
+              <dd id="job-state">-</dd>
+            </div>
+            <div>
+              <dt>任务条目数</dt>
+              <dd id="job-count">-</dd>
+            </div>
+            <div>
+              <dt>输出摘要</dt>
+              <dd id="job-summary">尚未提交任务</dd>
+            </div>
+          </dl>
+
+          <pre id="job-log" class="log-output">下载子应用尚未开始执行任务。</pre>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
